@@ -65,8 +65,8 @@ body {
 
 .item {
   width: calc(100% / 3);
+  // min-height: 300px;
   background-color: rgb(217, 197, 188, 0.9);
-  // border: 2px solid #EDE1CF;
   border-radius: 10px;
   margin: 0 10px;
 
@@ -74,6 +74,17 @@ body {
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.item-block {
+  height: 370px;
+  overflow: auto;
+  scrollbar-width: none;
+}
+
+.item-block::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .item-todo {
@@ -109,6 +120,7 @@ body {
 }
 
 .task-title {
+  margin-top: 30px;
   margin-bottom: 10px;
 }
 
@@ -146,27 +158,24 @@ body {
 
 .btn-select {
   position: absolute;
-  right: 65px;
-  top: 15px;
-
-}
-
-.btn-edit {
-  position: absolute;
   right: 15px;
   top: 15px;
 }
 
-.img-edit {
-  width: 20px;
+.btn-add, .btn-add:active, .btn-add:focus {
+  border-color: #107980;
+  background-color: #107980;
+  color: #fff;
 }
 
-button:hover, button:focus svg {
-  fill: #fff;
+.btn-add:hover {
+  border-color: #76A1A7;
+  background-color: #76A1A7;
+  color: #fff;
 }
 
-.btn-add {
-
+.modal-body--custom {
+  border-bottom: none;
 }
 
 .new-task {
@@ -176,8 +185,7 @@ button:hover, button:focus svg {
   margin: 10px 0;
 }
 
-.new-task__description {
-  display: flex;
+.new-task-description {
   height: 80px;
   max-height: 100px;
 }
@@ -190,10 +198,13 @@ button:hover, button:focus svg {
   position: absolute;
   left: 1rem;
 }
+
 .item-progress {
+  justify-content: flex-start;
 }
 
 .item-done {
+
 }
 
 
