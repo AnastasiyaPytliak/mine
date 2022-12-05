@@ -18,7 +18,7 @@ body {
 
 .wrapper {
   width: 100vw;
-  max-width: 80vw;
+  max-width: 82vw;
   margin: 50px auto;
   padding: 25px;
   background-color: rgb(217, 197, 188, 0.5);
@@ -87,6 +87,10 @@ body {
   height: 0;
 }
 
+.item-block-progress {
+  height: 420px;
+}
+
 .item-todo {
 }
 
@@ -106,7 +110,7 @@ body {
     }
 }
 
-.active {
+li.active, li:active, li:focus {
   background-color: #76A1A7 !important;
 }
 
@@ -189,6 +193,11 @@ body {
 .modal-body--custom {
   border-bottom: none;
 }
+
+.warrning-modal {
+  background-color: rgb(58, 58, 58, 0.7);
+}
+
 
 .new-task {
   width: 100%;

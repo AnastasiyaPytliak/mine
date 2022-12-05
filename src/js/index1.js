@@ -15,11 +15,17 @@ const doneContainerElement = document.querySelector('#items-done')
 const doneCounterElement = document.querySelector('#doneCounter')
 const deleteAllBtnElement = document.querySelector('#deleteAll')
 const submitFormBtnElement = document.querySelector('#submitForm')
-const getUsersFormElement = document.querySelector('#dropdownMenuEdit')
-const getUsersEditElement = document.querySelector('#dropdownMenuForm')
+const getUsersEditElement = document.querySelector('#dropdownMenuEdit')
+const getUsersFormElement  = document.querySelector('#dropdownMenuForm')
 const getNameUserElement = document.querySelector('#btnUser')
+const getNameNewUserElement = document.querySelector('#btnNewUser')
 const inputTaskEditElement = document.querySelector('#taskTitleEdit')
 const inputDescriptionEditElement = document.querySelector('#taskDescriptionEdit')
+const modalNoticeElement = document.querySelector('#myModal')
+const btnElement = document.querySelector('.btn-close-warn')
+const btnCloseModalElement = document.querySelector('.btn-close-item')
+const userElement = document.querySelector('.modal-footer-new')
+const userNewElement = document.querySelector('.modal-footer-end')
 
 render ()
 getUsers ()
@@ -30,7 +36,7 @@ function ToDo (title, description) {
   this.description = description
   this.id = Date.now()
   this.createdAt = new Date()
-  this.user = 'None'
+  this.user = getUsersSelect ()
   this.newClass = 'todo'
 }
 
@@ -39,6 +45,7 @@ function ToDo (title, description) {
 // Template task
 function creatTask (payload) {
   const date = payload.createdAt.toLocaleString()
+  // const user = payload.isActive ? getNameNewUserElement.textContent : 'Select user'
 
   return `
           <div class="task ${payload.newClass}" id="${payload.id}">
@@ -52,9 +59,9 @@ function creatTask (payload) {
                 Select
               </button>
               <ul class="dropdown-menu">
-                <li><button class="dropdown-item" type="button" data-role="todo">Todo</button></li>
-                <li><button class="dropdown-item" type="button" data-role="progress">In progress</button></li>
-                <li><button class="dropdown-item" type="button" data-role="done">Done</button></li>
+                <li class="dropdown-item" data-role="todo">Todo</li>
+                <li class="dropdown-item" data-role="progress">In progress</li>
+                <li class="dropdown-item" data-role="done">Done</li>
               </ul>
               <button type="button" class="btn btn-secondary btn-custom" data-role="edit" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">Edit</button>
               <button class="btn btn-secondary btn-custom" type="button" data-role="remove">Delete</button>
@@ -67,9 +74,10 @@ function creatTask (payload) {
 function buildTemplateUsers (payload) {
 
   return `
-        <li><button id=${payload.id} class="dropdown-item" data-role="option" type="button">${payload.name}</button></li>
+        <li id=${payload.id} class="dropdown-item dropdown-item__user" data-role="option" >${payload.name}</li>
           `
 }
+
 
 // Get Users
 async function getUsers () {
@@ -91,22 +99,38 @@ async function getUsers () {
 // Function for get Users
 function handleClickBtnUsersSelect (event) {
   const target = event.target
-
-  if (target.dataset.role == 'option') {
-    // const closestElement = target.closest('.dropdown-menu')
-    // const newEl = [...closestElement]
-    // const id = closestElement.id
-    // console.log(newEl);
-    console.log('dsdf');
-    // updateLocalStorage()
-    // render () 
+  if (target.classList.contains('dropdown-item__user')) {
+    getNameUserElement.textContent = target.textContent
   }
+  updateLocalStorage()
+  render () 
 }
+
+// function getUsersSelect (event) {
+//   const target = event.target
+//   if (target.classList.contains('dropdown-item__user')) {
+//     getNameNewUserElement.textContent = target.textContent
+//   }
+//   updateLocalStorage()
+//   render () 
+// }
+
+function getUsersSelect () {
+  const item = document.querySelector('.dropdown-item__user')
+  if (item.classList.contains('active')) {
+    getNameNewUserElement.textContent = item.textContent
+  } else {
+    getNameNewUserElement.textContent = 'Select user'
+  }
+  
+  updateLocalStorage()
+  render () 
+}
+
 
 
 // Function for edit form
 function handleClickButtonEditSave (event) {
-  event.preventDefault()
   const target = event.target
 
   if (target.dataset.role == 'edit') {
@@ -118,6 +142,16 @@ function handleClickButtonEditSave (event) {
         inputTaskEditElement.value = itemsArray[i].title
         inputDescriptionEditElement.value = itemsArray[i].description
         getNameUserElement.textContent = itemsArray[i].user
+        
+        formEditElement.addEventListener('submit', function (event) {
+          event.preventDefault()
+          itemsArray[i].title = inputTaskEditElement.value
+          itemsArray[i].description = inputDescriptionEditElement.value
+          itemsArray[i].user = getNameUserElement.textContent
+          formEditElement.reset()
+          updateLocalStorage()
+          render () 
+        })
       }
     })
 
@@ -126,6 +160,16 @@ function handleClickButtonEditSave (event) {
         inputTaskEditElement.value = itemsArrayProgress[i].title
         inputDescriptionEditElement.value = itemsArrayProgress[i].description
         getNameUserElement.textContent = itemsArrayProgress[i].user
+
+        formEditElement.addEventListener('submit', function (event) {
+          event.preventDefault()
+          itemsArrayProgress[i].title = inputTaskEditElement.value
+          itemsArrayProgress[i].description = inputDescriptionEditElement.value
+          itemsArrayProgress[i].user = getNameUserElement.textContent
+          formEditElement.reset()
+          updateLocalStorage()
+          render () 
+        })
       }
     })
 
@@ -134,12 +178,18 @@ function handleClickButtonEditSave (event) {
         inputTaskEditElement.value = itemsArrayDone[i].title
         inputDescriptionEditElement.value = itemsArrayDone[i].description
         getNameUserElement.textContent = itemsArrayDone[i].user
+
+        formEditElement.addEventListener('submit', function (event) {
+          event.preventDefault()
+          itemsArrayDone[i].title = inputTaskEditElement.value
+          itemsArrayDone[i].description = inputDescriptionEditElement.value
+          itemsArrayDone[i].user = getNameUserElement.textContent
+          formEditElement.reset()
+          updateLocalStorage()
+          render () 
+        })
       }
     })
-    
-      updateLocalStorage()
-      render () 
-    
   }
 }
 
@@ -288,6 +338,7 @@ function removeById (id) {
 
 //--------------------------------------------------------------------------
 
+// 
 // Add task
 function heandleSubmitForm (event) {
   event.preventDefault()
@@ -297,11 +348,19 @@ function heandleSubmitForm (event) {
   if (itemsArray.length < 3) {
     itemsArray.push(taskInfo)
   } else {
-    console.log('as');
+    modalNoticeElement.classList.toggle('show')
+    modalNoticeElement.setAttribute('style', 'display:block')
   }
   formElement.reset()
   updateLocalStorage()
   render ()
+}
+
+
+// Close modal window "> 3"
+function handleClickCloseModal () {
+  modalNoticeElement.classList.remove('show')
+  modalNoticeElement.setAttribute('style', 'display:none')
 }
 
 
@@ -334,7 +393,8 @@ function handleClickTodo (event) {
           itemsArray.push(item)
           itemsArrayProgress.splice(index, 1)
         } else {
-          console.log('ads');
+          modalNoticeElement.classList.add('show')
+          modalNoticeElement.setAttribute('style', 'display:block')
         }
       }
     })
@@ -344,9 +404,10 @@ function handleClickTodo (event) {
         if (itemsArray.length < 3) {
           item.newClass = 'todo'
           itemsArray.push(item)
-          itemsArray.splice(index, 1)
+          itemsArrayDone.splice(index, 1)
         } else {
-          console.log('ads');
+          modalNoticeElement.classList.add('show')
+          modalNoticeElement.setAttribute('style', 'display:block')
         }
       }
     })
@@ -372,7 +433,8 @@ function handleClickInProgress (event) {
           itemsArrayProgress.push(item)
           itemsArray.splice(index, 1)
         } else {
-          console.log('ads');
+          modalNoticeElement.classList.add('show')
+          modalNoticeElement.setAttribute('style', 'display:block')
         }
       }
     })
@@ -384,7 +446,8 @@ function handleClickInProgress (event) {
           itemsArrayProgress.push(item)
           itemsArrayDone.splice(index, 1)
         } else {
-          console.log('ads');
+          modalNoticeElement.classList.add('show')
+          modalNoticeElement.setAttribute('style', 'display:block')
         }
       }
     })
@@ -410,7 +473,8 @@ function handleClickDone (event) {
           itemsArrayDone.push(item)
           itemsArray.splice(index, 1)
         } else {
-          console.log('ads');
+          modalNoticeElement.classList.add('show')
+          modalNoticeElement.setAttribute('style', 'display:block')
         }
       }
     })
@@ -422,7 +486,8 @@ function handleClickDone (event) {
           itemsArrayDone.push(item)
           itemsArrayProgress.splice(index, 1)
         } else {
-          console.log('ads');
+          modalNoticeElement.classList.add('show')
+          modalNoticeElement.setAttribute('style', 'display:block')
         }
       }
     })
@@ -471,4 +536,8 @@ doneContainerElement.addEventListener('click', handleClickInProgress)
 
 deleteAllBtnElement.addEventListener('click', handleClickButtonRemoveAll)
 
-getNameUserElement.addEventListener('click', handleClickBtnUsersSelect)
+userElement.addEventListener('click', handleClickBtnUsersSelect)
+userNewElement.addEventListener('click', getUsersSelect)
+
+btnElement.addEventListener('click', handleClickCloseModal)
+btnCloseModalElement.addEventListener('click', handleClickCloseModal)

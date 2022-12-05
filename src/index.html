@@ -50,8 +50,8 @@
                   <input id="taskTitle" class="new-task" type="text" placeholder="Add title ..." maxlength="30">
                   <input id="taskDescription" class="new-task new-task-description" type="text" placeholder="Add description ...">
                 </div>
-                <div class="modal-footer">
-                  <button class="btn btn-secondary btn-select__users" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="modal-footer modal-footer-end">
+                  <button id="btnNewUser" class="btn btn-secondary btn-select__users" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Select user
                   </button>
                   <ul id="dropdownMenuForm" class="dropdown-menu">
@@ -79,7 +79,7 @@
                 <input id="taskTitleEdit" class="new-task" type="text" placeholder="Add title ..." maxlength="30">
                 <input id="taskDescriptionEdit" class="new-task new-task-description" type="text" placeholder="Add description ...">
               </div>
-              <div class="modal-footer">
+              <div class="modal-footer modal-footer-new">
                 <button id="btnUser" class="btn btn-secondary btn-select__users" type="button" data-bs-toggle="dropdown" aria-expanded="false" >
               
                 </button>
@@ -100,7 +100,7 @@
           <div class="item-title">In Progress</div>
           <div id="progressCounter" class="item-progress__counter">0</div>
         </div>
-        <div id="items-progress" class="item-block">
+        <div id="items-progress" class="item-block item-block-progress">
 
         </div>
 
@@ -141,25 +141,22 @@
 
         <!-- Modal Warrning -->
 
-        <!-- <button style="opacity: 0" class="btn-warn" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          warrning-modal
-        </button>
-        <div class="modal fade warrning-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
+        <div class="modal fade warrning-modal" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Container is full</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-warn" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 The maximum number of tasks in a block is 3
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary btn-close-item" data-bs-dismiss="modal">Cancel</button>
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
 
 
       </div>
