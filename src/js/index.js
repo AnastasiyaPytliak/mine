@@ -1,6 +1,7 @@
 let itemsArray = getItemFromStorage ()
 
 const formElement = document.querySelector('#form')
+const formEditElement = document.querySelector('#form2')
 const inputTitleElement = document.querySelector('#taskTitle')
 const inputDescriptionElement = document.querySelector('#taskDescription')
 const todoContainerElement = document.querySelector('#items-todo')
@@ -11,8 +12,12 @@ const doneContainerElement = document.querySelector('#items-done')
 const doneCounterElement = document.querySelector('#doneCounter')
 const deleteAllBtnElement = document.querySelector('#deleteAll')
 const submitFormBtnElement = document.querySelector('#submitForm')
-
-
+const getUsersFormElement = document.querySelector('#dropdownMenuEdit')
+const getUsersEditElement = document.querySelector('#dropdownMenuForm')
+const getNameUserElement = document.querySelector('#btnUser')
+const inputTaskEditElement = document.querySelector('#taskTitleEdit')
+const inputDescriptionEditElement = document.querySelector('#taskDescriptionEdit')
+const btnUserElement = document.querySelector('#btnUser')
 
 render ()
 
@@ -33,8 +38,11 @@ function ToDo (title, description) {
   this.description = description
   this.id = Date.now()
   this.createdAt = new Date()
+  this.user = 'None'
   this.newClass = 'todo'
 }
+
+
 
 function creatTask (payload) {
   const date = payload.createdAt.toLocaleString()
@@ -43,7 +51,7 @@ function creatTask (payload) {
           <div class="task ${payload.newClass}" id="${payload.id}">
             <div class="task-title">${payload.title}</div>
             <div class="task-description">${payload.description}</div>
-            <div class="task-user">User</div>
+            <div class="task-user">${payload.user}</div>
             <div class="task-time">${date}</div>
 
             <div class="dropdown btn-select">
@@ -63,6 +71,51 @@ function creatTask (payload) {
 }
 
 
+function buildTemplateUsers (payload) {
+
+  return `
+        <li><button id=${payload.id} class="dropdown-item" data-role="option" type="button">${payload.name}</button></li>
+          `
+}
+
+async function getUsers () {
+  try {
+    const data = await fetch('https://jsonplaceholder.typicode.com/users')
+    const newData = await data.json()
+    const html = newData.reduce((sum, item) => {
+      const userItem = buildTemplateUsers(item)
+  
+      return sum + userItem
+    }, '')
+    getUsersFormElement.innerHTML = html
+    getUsersEditElement.innerHTML = html
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+getUsers ()
+
+
+function handleClickBtnUsersSelect (event) {
+  const target = event.target
+  // let userItem = document.querySelector('.dropdown-item')
+  if (target.dataset.role == 'option') {
+    // const userItem = target.classList.contains('dropdown-item')
+    getNameUserElement.textContent = target.textContent
+    // console.log(userItem);
+    // const newEl = [...closestElement]
+    // const id = userItem.id
+    // console.log(newEl);
+    // console.log(id);
+    updateLocalStorage()
+    render () 
+  }
+
+  // let newEl = getUsersFormElement.selectedIndex
+  // console.log(newEl);
+}
+
 function removeById (id) {
   itemsArray.forEach((item, index) => {
     if (item.id == id) {
@@ -72,18 +125,52 @@ function removeById (id) {
 }
 
 
-function handleClickButtonEdit (event) {
+
+function handleClickButtonEditSave (event) {
+  event.preventDefault()
   const target = event.target
 
   if (target.dataset.role == 'edit') {
     const closestElement = target.closest('.task')
-    // const id = closestElement.id
-
-    updateLocalStorage()
-    render () 
+    const id = +closestElement.id
+    for (let i = 0; i < itemsArray.length; i++)  {
+      if (itemsArray[i].id == id) {
+        inputTaskEditElement.value = itemsArray[i].title
+        inputDescriptionEditElement.value = itemsArray[i].description
+        btnUserElement.textContent = itemsArray[i].user
+      }
+      // if (itemsArray[i].id == id) {
+      //   itemsArray[i].title = inputTaskEditElement.value
+      //   itemsArray[i].description = inputDescriptionEditElement.value
+      //   itemsArray[i].user = btnUserElement.textContent
+      // }
+      updateLocalStorage()
+      render () 
+    }
   }
 }
 
+function handleClickButtonEdit (event) {
+  event.preventDefault()
+  const target = event.target
+
+  if (target.dataset.role == 'edit') {
+    const closestElement = target.closest('.task')
+    const id = +closestElement.id
+    for (let i = 0; i < itemsArray.length; i++)  {
+      if (itemsArray[i].id == id) {
+        itemsArray[i].title = inputTaskEditElement.value
+        itemsArray[i].description = inputDescriptionEditElement.value
+        itemsArray[i].user = btnUserElement.textContent
+      }
+    
+    }
+  }
+  formElement.reset()
+  
+  updateLocalStorage()
+  render () 
+}
 
 function handleClickButtonRemove(event) {
   const target = event.target
@@ -113,6 +200,7 @@ function getItemFromStorage () {
 }
 
 
+
 function updateLocalStorage () {
   localStorage.setItem('todos', JSON.stringify(itemsArray))
 }
@@ -122,7 +210,13 @@ function heandleSubmitForm (event) {
   const titleValue = inputTitleElement.value
   const descriptionValue = inputDescriptionElement.value
   let taskInfo = new ToDo (titleValue, descriptionValue)
-  itemsArray.push(taskInfo)
+  itemsArray.forEach((item) => {
+    if (item.newClass == 'todo') {
+      itemsArray.push(taskInfo)
+    }
+  })
+ 
+ 
   
   formElement.reset()
   
@@ -139,12 +233,15 @@ function render () {
 
   for (let i = 0; i < itemsArray.length; i++) {
     if (itemsArray[i].newClass == 'todo') {
-      arrayTodo.push(itemsArray[i])
-      todoContainerElement.innerHTML = arrayTodo.reduce((sum, item) => {
-        const htmlItem = creatTask(item)
-    
-        return sum + htmlItem
-      }, '')
+      if (arrayTodo.length < 3) {
+        arrayTodo.push(itemsArray[i])
+        todoContainerElement.innerHTML = arrayTodo.reduce((sum, item) => {
+          const htmlItem = creatTask(item)
+      
+          return sum + htmlItem
+        }, '')
+      }
+      
     } else if (itemsArray[i].newClass == 'in-progress') {
       arrayInProgress.push(itemsArray[i])
       inProgressContainerElement.innerHTML = arrayInProgress.reduce((sum, item) => {
@@ -164,9 +261,7 @@ function render () {
 
   if (arrayTodo.length == 0) {
     todoContainerElement.innerHTML = ''
-  } else {
-    
-  }
+  } 
   if (arrayInProgress.length == 0) {
     inProgressContainerElement.innerHTML = ''
   }
@@ -224,6 +319,7 @@ function handleClickTodo (event) {
         itemsArray[i].newClass = 'todo'
       }
     }
+
     updateLocalStorage ()
     render () 
   }
@@ -243,27 +339,31 @@ function handleClickButtonRemoveAll () {
   render () 
 }
 
+
+
+
 console.log(itemsArray);
 
 formElement.addEventListener('submit', heandleSubmitForm)
+formEditElement.addEventListener('submit', handleClickButtonEditSave)
 
 todoContainerElement.addEventListener('click', handleClickButtonRemove)
-todoContainerElement.addEventListener('click', handleClickButtonEdit)
+// todoContainerElement.addEventListener('click', handleClickButtonEdit)
 todoContainerElement.addEventListener('click', handleClickInProgress)
 todoContainerElement.addEventListener('click', handleClickDone)
 
 
 inProgressContainerElement.addEventListener('click', handleClickButtonRemove)
-inProgressContainerElement.addEventListener('click', handleClickButtonEdit)
+// inProgressContainerElement.addEventListener('click', handleClickButtonEdit)
 inProgressContainerElement.addEventListener('click', handleClickTodo)
 inProgressContainerElement.addEventListener('click', handleClickDone)
 
 
 doneContainerElement.addEventListener('click', handleClickButtonRemove)
-doneContainerElement.addEventListener('click', handleClickButtonEdit)
+// doneContainerElement.addEventListener('click', handleClickButtonEdit)
 doneContainerElement.addEventListener('click', handleClickTodo)
 doneContainerElement.addEventListener('click', handleClickInProgress)
 
 deleteAllBtnElement.addEventListener('click', handleClickButtonRemoveAll)
 
-
+getNameUserElement.addEventListener('click', handleClickBtnUsersSelect)
