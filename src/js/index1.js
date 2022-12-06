@@ -27,6 +27,7 @@ const btnCloseModalElement = document.querySelector('.btn-close-item')
 const userElement = document.querySelector('.modal-footer-new')
 const userNewElement = document.querySelector('.modal-footer-end')
 
+
 render ()
 getUsers ()
 
@@ -36,7 +37,7 @@ function ToDo (title, description) {
   this.description = description
   this.id = Date.now()
   this.createdAt = new Date()
-  this.user = getUsersSelect ()
+  this.user = 'None'
   this.newClass = 'todo'
 }
 
@@ -45,7 +46,6 @@ function ToDo (title, description) {
 // Template task
 function creatTask (payload) {
   const date = payload.createdAt.toLocaleString()
-  // const user = payload.isActive ? getNameNewUserElement.textContent : 'Select user'
 
   return `
           <div class="task ${payload.newClass}" id="${payload.id}">
@@ -69,6 +69,7 @@ function creatTask (payload) {
           </div>
         `
 }
+
 
 // Template Users
 function buildTemplateUsers (payload) {
@@ -96,7 +97,7 @@ async function getUsers () {
   }
 }
 
-// Function for get Users
+// Function for get Users for Edt
 function handleClickBtnUsersSelect (event) {
   const target = event.target
   if (target.classList.contains('dropdown-item__user')) {
@@ -106,37 +107,27 @@ function handleClickBtnUsersSelect (event) {
   render () 
 }
 
-// function getUsersSelect (event) {
+
+// Function for get Users for Form
+// function getUsersSelect () {
 //   const target = event.target
 //   if (target.classList.contains('dropdown-item__user')) {
+//     target.classList.add('active')
 //     getNameNewUserElement.textContent = target.textContent
 //   }
 //   updateLocalStorage()
 //   render () 
 // }
 
-function getUsersSelect () {
-  const item = document.querySelector('.dropdown-item__user')
-  if (item.classList.contains('active')) {
-    getNameNewUserElement.textContent = item.textContent
-  } else {
-    getNameNewUserElement.textContent = 'Select user'
-  }
-  
-  updateLocalStorage()
-  render () 
-}
-
-
 
 // Function for edit form
 function handleClickButtonEditSave (event) {
   const target = event.target
-
+  
   if (target.dataset.role == 'edit') {
     const closestElement = target.closest('.task')
     const id = +closestElement.id
-
+    
     itemsArray.forEach((item, i) => {
       if (item.id == id) {
         inputTaskEditElement.value = itemsArray[i].title
@@ -148,7 +139,6 @@ function handleClickButtonEditSave (event) {
           itemsArray[i].title = inputTaskEditElement.value
           itemsArray[i].description = inputDescriptionEditElement.value
           itemsArray[i].user = getNameUserElement.textContent
-          formEditElement.reset()
           updateLocalStorage()
           render () 
         })
@@ -166,7 +156,6 @@ function handleClickButtonEditSave (event) {
           itemsArrayProgress[i].title = inputTaskEditElement.value
           itemsArrayProgress[i].description = inputDescriptionEditElement.value
           itemsArrayProgress[i].user = getNameUserElement.textContent
-          formEditElement.reset()
           updateLocalStorage()
           render () 
         })
@@ -184,7 +173,6 @@ function handleClickButtonEditSave (event) {
           itemsArrayDone[i].title = inputTaskEditElement.value
           itemsArrayDone[i].description = inputDescriptionEditElement.value
           itemsArrayDone[i].user = getNameUserElement.textContent
-          formEditElement.reset()
           updateLocalStorage()
           render () 
         })
@@ -537,7 +525,7 @@ doneContainerElement.addEventListener('click', handleClickInProgress)
 deleteAllBtnElement.addEventListener('click', handleClickButtonRemoveAll)
 
 userElement.addEventListener('click', handleClickBtnUsersSelect)
-userNewElement.addEventListener('click', getUsersSelect)
+// userNewElement.addEventListener('click', getUsersSelect)
 
 btnElement.addEventListener('click', handleClickCloseModal)
 btnCloseModalElement.addEventListener('click', handleClickCloseModal)
