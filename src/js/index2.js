@@ -37,7 +37,7 @@ function ToDo (title, description) {
   this.description = description
   this.id = Date.now()
   this.createdAt = new Date()
-  this.user = 'None'
+  // this.user = 'None'
   this.newClass = 'todo'
 }
 
@@ -97,6 +97,18 @@ async function getUsers () {
   }
 }
 
+fetch('https://jsonplaceholder.typicode.com/users')
+  .then((response) => {
+    return response.json()
+  })
+  .then ((data) => {
+    render (data)
+  })
+  .catch((error) => {
+    console.log(`Error: ${error}`);
+  })
+
+
 // Function for get Users for Edt
 function handleClickBtnUsersSelect (event) {
   const target = event.target
@@ -130,15 +142,15 @@ function handleClickButtonEditSave (event) {
     
     itemsArray.forEach((item, i) => {
       if (item.id == id) {
-        inputTaskEditElement.value = itemsArray[i].title
-        inputDescriptionEditElement.value = itemsArray[i].description
-        getNameUserElement.textContent = itemsArray[i].user
+        inputTaskEditElement.value = item.title
+        inputDescriptionEditElement.value = item.description
+        getNameUserElement.textContent = item.user
         
         formEditElement.addEventListener('submit', function (event) {
           event.preventDefault()
-          itemsArray[i].title = inputTaskEditElement.value
-          itemsArray[i].description = inputDescriptionEditElement.value
-          itemsArray[i].user = getNameUserElement.textContent
+          item.title = inputTaskEditElement.value
+          item.description = inputDescriptionEditElement.value
+          item.user = getNameUserElement.textContent
           updateLocalStorage()
           render () 
         })
