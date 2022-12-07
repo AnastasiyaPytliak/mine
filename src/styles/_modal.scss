@@ -1,0 +1,56 @@
+/* Modal style*/
+
+.btn-item--custom {
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+  background-color: #EDE1CF;
+  border-radius: 0 0 10px 10px;
+  border: none;
+  color: #000;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.modal-body--custom {
+  border-bottom: none;
+}
+
+.warrning-modal {
+  background-color: rgb(58, 58, 58, 0.7);
+}
+
+.new-task {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #dee2e6;
+  margin: 10px 0;
+}
+
+.new-task-description {
+  height: 80px;
+  max-height: 100px;
+}
+
+.new-task:focus {
+  outline: 0;
+}
+
+.btn-select__users {
+  position: absolute;
+  left: 1rem;
+  width: 236px;
+  height: 38px;
+}
+
+.btn-add, .btn-add:active, .btn-add:focus {
+  border-color: #107980;
+  background-color: #107980;
+  color: #fff;
+}
+
+.btn-add:hover {
+  border-color: #76A1A7;
+  background-color: #76A1A7;
+  color: #fff;
+}
