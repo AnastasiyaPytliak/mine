@@ -35,7 +35,7 @@ function heandleSubmitForm (event) {
 
 
 // Edit form
-function handleClickButtonEditSave (event) {
+function handleClickButtonEdit (event) {
   const target = event.target
   
   if (target.dataset.role == 'edit') {
@@ -259,7 +259,7 @@ function handleClickButtonRemoveAll () {
 }
 
 export { heandleSubmitForm,
-        handleClickButtonEditSave,
+        handleClickButtonEdit,
         handleClickCloseModal,
         handleClickButtonRemove,
         handleClickTodo,

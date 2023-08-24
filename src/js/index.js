@@ -1,10 +1,10 @@
 import { renderUser } from './module/template-user.js'
 
-import { clock,
+import { getTime,
         render } from './module/function.js'
 
 import{ heandleSubmitForm,
-        handleClickButtonEditSave,
+        handleClickButtonEdit,
         handleClickCloseModal,
         handleClickButtonRemove,
         handleClickTodo,
@@ -22,7 +22,7 @@ import { url,
         btnCloseModalElement } from './module/variables.js'
 
 render ()
-clock ()
+getTime ()
 
 
 // Get users
@@ -43,18 +43,17 @@ formElement.addEventListener('submit', heandleSubmitForm)
 todoContainerElement.addEventListener('click', handleClickButtonRemove)
 todoContainerElement.addEventListener('click', handleClickInProgress)
 todoContainerElement.addEventListener('click', handleClickDone)
-todoContainerElement.addEventListener('click', handleClickButtonEditSave)
+todoContainerElement.addEventListener('click', handleClickButtonEdit)
 
 inProgressContainerElement.addEventListener('click', handleClickButtonRemove)
 inProgressContainerElement.addEventListener('click', handleClickTodo)
 inProgressContainerElement.addEventListener('click', handleClickDone)
-inProgressContainerElement.addEventListener('click', handleClickButtonEditSave)
-
+inProgressContainerElement.addEventListener('click', handleClickButtonEdit)
 
 doneContainerElement.addEventListener('click', handleClickButtonRemove)
 doneContainerElement.addEventListener('click', handleClickTodo)
 doneContainerElement.addEventListener('click', handleClickInProgress)
-doneContainerElement.addEventListener('click', handleClickButtonEditSave)
+doneContainerElement.addEventListener('click', handleClickButtonEdit)
 
 deleteAllBtnElement.addEventListener('click', handleClickButtonRemoveAll)
 

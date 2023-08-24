@@ -13,7 +13,7 @@ import { creatTask } from './template.js'
 
 
 // Clock
-function clock () {
+function getTime () {
   setInterval(() => {
     let date = new Date()
     document.querySelector('.time').innerHTML = date.toLocaleTimeString()
@@ -127,7 +127,7 @@ function removeById (id) {
   })
 }
 
-export { clock,
+export { getTime,
         getItemFromStorage,
         getItemFromStorageProgress,
         getItemFromStorageDone,
